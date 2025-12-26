@@ -29,7 +29,7 @@ const mockProducts: Product[] = [
 export default function Index() {
   const [searchQuery, setSearchQuery] = useState('');
   const [cart, setCart] = useState<{ [key: number]: number }>({});
-  const [activeSection, setActiveSection] = useState('catalog');
+  const [activeSection, setActiveSection] = useState('home');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const filteredProducts = mockProducts.filter(
@@ -58,6 +58,14 @@ export default function Index() {
             </div>
 
             <nav className="hidden md:flex items-center gap-6">
+              <button
+                onClick={() => setActiveSection('home')}
+                className={`text-sm font-medium transition-colors hover:text-primary ${
+                  activeSection === 'home' ? 'text-primary' : 'text-foreground'
+                }`}
+              >
+                Главная
+              </button>
               <button
                 onClick={() => setActiveSection('catalog')}
                 className={`text-sm font-medium transition-colors hover:text-primary ${
@@ -111,6 +119,17 @@ export default function Index() {
 
           {mobileMenuOpen && (
             <nav className="md:hidden mt-4 pb-4 flex flex-col gap-2 animate-fade-in">
+              <button
+                onClick={() => {
+                  setActiveSection('home');
+                  setMobileMenuOpen(false);
+                }}
+                className={`text-left px-4 py-3 rounded-md text-sm font-medium transition-colors ${
+                  activeSection === 'home' ? 'bg-primary text-primary-foreground' : 'hover:bg-muted text-foreground'
+                }`}
+              >
+                Главная
+              </button>
               <button
                 onClick={() => {
                   setActiveSection('catalog');
@@ -169,6 +188,148 @@ export default function Index() {
       </header>
 
       <main className="container mx-auto px-4 py-8">
+        {activeSection === 'home' && (
+          <>
+            <section className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 border-2 border-primary/20 mb-12">
+              <div className="container mx-auto px-8 py-16 lg:py-24">
+                <div className="max-w-3xl">
+                  <h2 className="text-4xl lg:text-5xl font-bold text-foreground mb-6">
+                    Швейная фурнитура для профессионалов
+                  </h2>
+                  <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
+                    Качественные материалы для швейного производства. Широкий ассортимент, оптовые цены, доставка по всей России.
+                  </p>
+                  <div className="flex flex-wrap gap-4">
+                    <Button onClick={() => setActiveSection('catalog')} size="lg" className="text-base">
+                      <Icon name="Package" size={20} className="mr-2" />
+                      Перейти в каталог
+                    </Button>
+                    <Button onClick={() => setActiveSection('about')} size="lg" variant="outline" className="text-base">
+                      О компании
+                    </Button>
+                  </div>
+                </div>
+              </div>
+              <div className="absolute right-0 bottom-0 opacity-10">
+                <Icon name="Package2" size={300} className="text-primary" />
+              </div>
+            </section>
+
+            <section className="mb-12">
+              <h3 className="text-2xl font-bold text-foreground mb-6">Преимущества работы с нами</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <Card className="border-2 hover:shadow-lg transition-shadow">
+                  <CardHeader>
+                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+                      <Icon name="BadgeCheck" size={24} className="text-primary" />
+                    </div>
+                    <CardTitle>Гарантия качества</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-muted-foreground">
+                      Работаем только с проверенными производителями. Вся продукция сертифицирована.
+                    </p>
+                  </CardContent>
+                </Card>
+
+                <Card className="border-2 hover:shadow-lg transition-shadow">
+                  <CardHeader>
+                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+                      <Icon name="Clock" size={24} className="text-primary" />
+                    </div>
+                    <CardTitle>Быстрая доставка</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-muted-foreground">
+                      Отправка в день заказа. Доставка по Москве за 1-2 дня, по России — от 3 дней.
+                    </p>
+                  </CardContent>
+                </Card>
+
+                <Card className="border-2 hover:shadow-lg transition-shadow">
+                  <CardHeader>
+                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+                      <Icon name="Percent" size={24} className="text-primary" />
+                    </div>
+                    <CardTitle>Выгодные цены</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-muted-foreground">
+                      Оптовые и розничные цены. Гибкая система скидок для постоянных клиентов.
+                    </p>
+                  </CardContent>
+                </Card>
+              </div>
+            </section>
+
+            <section className="mb-12">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-2xl font-bold text-foreground">Популярные товары</h3>
+                <Button onClick={() => setActiveSection('catalog')} variant="link" className="text-primary">
+                  Смотреть все
+                  <Icon name="ArrowRight" size={16} className="ml-2" />
+                </Button>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {mockProducts.slice(0, 4).map((product) => (
+                  <Card key={product.id} className="group hover:shadow-lg transition-all duration-300 border-2">
+                    <CardHeader className="p-0">
+                      <div className="aspect-square bg-muted flex items-center justify-center overflow-hidden">
+                        <Icon name="Package2" size={64} className="text-muted-foreground group-hover:scale-110 transition-transform" />
+                      </div>
+                    </CardHeader>
+                    <CardContent className="p-4">
+                      <div className="flex items-start justify-between mb-2">
+                        <Badge variant="outline" className="text-xs">
+                          {product.article}
+                        </Badge>
+                        <Badge variant="secondary" className="text-xs">
+                          {product.category}
+                        </Badge>
+                      </div>
+                      <CardTitle className="text-base mb-2 line-clamp-2">{product.name}</CardTitle>
+                      <CardDescription className="text-xl font-bold text-primary">
+                        {product.price} ₽ <span className="text-sm font-normal text-muted-foreground">/ {product.unit}</span>
+                      </CardDescription>
+                    </CardContent>
+                    <CardFooter className="p-4 pt-0">
+                      <Button onClick={() => addToCart(product.id)} className="w-full font-medium" size="sm">
+                        <Icon name="ShoppingCart" size={16} className="mr-2" />
+                        В корзину
+                      </Button>
+                    </CardFooter>
+                  </Card>
+                ))}
+              </div>
+            </section>
+
+            <section className="mb-12">
+              <Card className="border-2 border-primary/20 bg-gradient-to-r from-primary/5 to-transparent">
+                <CardContent className="p-8">
+                  <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div className="flex-1">
+                      <h3 className="text-2xl font-bold text-foreground mb-3">Нужна консультация?</h3>
+                      <p className="text-muted-foreground">
+                        Наши специалисты помогут подобрать нужную фурнитуру и ответят на все вопросы
+                      </p>
+                    </div>
+                    <div className="flex flex-col gap-3">
+                      <a href="tel:+74951234567" className="flex items-center gap-2 text-lg font-bold text-foreground hover:text-primary transition-colors">
+                        <Icon name="Phone" size={20} className="text-primary" />
+                        +7 (495) 123-45-67
+                      </a>
+                      <a href="mailto:info@shveyfurnitura.ru" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors">
+                        <Icon name="Mail" size={16} className="text-primary" />
+                        info@shveyfurnitura.ru
+                      </a>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </section>
+          </>
+        )}
+
         {activeSection === 'catalog' && (
           <>
             <div className="mb-8">
