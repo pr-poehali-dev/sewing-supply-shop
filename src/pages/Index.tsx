@@ -30,6 +30,7 @@ export default function Index() {
   const [searchQuery, setSearchQuery] = useState('');
   const [cart, setCart] = useState<{ [key: number]: number }>({});
   const [activeSection, setActiveSection] = useState('catalog');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const filteredProducts = mockProducts.filter(
     (product) =>
@@ -52,7 +53,7 @@ export default function Index() {
               <Icon name="Package" size={32} className="text-primary" />
               <div>
                 <h1 className="text-xl font-bold text-foreground">ШвейФурнитура</h1>
-                <p className="text-xs text-muted-foreground">Профессиональные товары для швейного производства</p>
+                <p className="text-xs text-muted-foreground hidden sm:block">Профессиональные товары для швейного производства</p>
               </div>
             </div>
 
@@ -98,7 +99,72 @@ export default function Index() {
                 </div>
               </button>
             </nav>
+
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-2 hover:bg-muted rounded-md transition-colors"
+              aria-label="Меню"
+            >
+              <Icon name={mobileMenuOpen ? 'X' : 'Menu'} size={24} className="text-foreground" />
+            </button>
           </div>
+
+          {mobileMenuOpen && (
+            <nav className="md:hidden mt-4 pb-4 flex flex-col gap-2 animate-fade-in">
+              <button
+                onClick={() => {
+                  setActiveSection('catalog');
+                  setMobileMenuOpen(false);
+                }}
+                className={`text-left px-4 py-3 rounded-md text-sm font-medium transition-colors ${
+                  activeSection === 'catalog' ? 'bg-primary text-primary-foreground' : 'hover:bg-muted text-foreground'
+                }`}
+              >
+                Каталог
+              </button>
+              <button
+                onClick={() => {
+                  setActiveSection('about');
+                  setMobileMenuOpen(false);
+                }}
+                className={`text-left px-4 py-3 rounded-md text-sm font-medium transition-colors ${
+                  activeSection === 'about' ? 'bg-primary text-primary-foreground' : 'hover:bg-muted text-foreground'
+                }`}
+              >
+                О компании
+              </button>
+              <button
+                onClick={() => {
+                  setActiveSection('delivery');
+                  setMobileMenuOpen(false);
+                }}
+                className={`text-left px-4 py-3 rounded-md text-sm font-medium transition-colors ${
+                  activeSection === 'delivery' ? 'bg-primary text-primary-foreground' : 'hover:bg-muted text-foreground'
+                }`}
+              >
+                Доставка
+              </button>
+              <button
+                onClick={() => {
+                  setActiveSection('cart');
+                  setMobileMenuOpen(false);
+                }}
+                className={`text-left px-4 py-3 rounded-md text-sm font-medium transition-colors flex items-center justify-between ${
+                  activeSection === 'cart' ? 'bg-primary text-primary-foreground' : 'hover:bg-muted text-foreground'
+                }`}
+              >
+                <span className="flex items-center gap-2">
+                  <Icon name="ShoppingCart" size={20} />
+                  Корзина
+                </span>
+                {cartItemsCount > 0 && (
+                  <Badge variant={activeSection === 'cart' ? 'secondary' : 'default'}>
+                    {cartItemsCount}
+                  </Badge>
+                )}
+              </button>
+            </nav>
+          )}
         </div>
       </header>
 
